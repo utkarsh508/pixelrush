@@ -3,76 +3,94 @@ const ctx = canvas.getContext("2d");
 
 const box = 20;
 
-let snake = [{ x: 9 * box, y: 9 * box }];
-let direction = "RIGHT";
+let snake = [
+  { x: 200, y: 200 }
+];
 
-let food = randomFood();
+let food = {
+  x: Math.floor(Math.random() * 20) * box,
+  y: Math.floor(Math.random() * 20) * box
+};
+
+let direction = "RIGHT";
+let score = 0;
 
 document.addEventListener("keydown", changeDirection);
 
-function changeDirection(event) {
-  if (event.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
-  else if (event.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
-  else if (event.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
-  else if (event.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
-}
-
-function randomFood() {
-  return {
-    x: Math.floor(Math.random() * 20) * box,
-    y: Math.floor(Math.random() * 20) * box
-  };
-}
-
-function collision(head, array) {
-  for (let i = 0; i < array.length; i++) {
-    if (head.x === array[i].x && head.y === array[i].y) return true;
-  }
-  return false;
+function changeDirection(e) {
+  if (e.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
+  if (e.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
+  if (e.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
+  if (e.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
 }
 
 function draw() {
-  ctx.fillStyle = "#111";
+
+  ctx.fillStyle = "#050505";
   ctx.fillRect(0, 0, 400, 400);
 
-  // snake
-  for (let i = 0; i < snake.length; i++) {
-    ctx.fillStyle = i === 0 ? "lime" : "green";
-    ctx.fillRect(snake[i].x, snake[i].y, box, box);
-  }
+  // food glow
+  ctx.shadowBlur = 20;
+  ctx.shadowColor = "red";
 
-  // food
   ctx.fillStyle = "red";
-  ctx.fillRect(food.x, food.y, box, box);
+  ctx.beginPath();
+  ctx.arc(food.x + 10, food.y + 10, 8, 0, Math.PI * 2);
+  ctx.fill();
+
+  // snake
+  snake.forEach((part, index) => {
+
+    ctx.shadowBlur = 20;
+
+    if(index === 0) {
+      ctx.fillStyle = "cyan";
+      ctx.shadowColor = "cyan";
+    } else {
+      ctx.fillStyle = "lime";
+      ctx.shadowColor = "lime";
+    }
+
+    ctx.fillRect(part.x, part.y, box, box);
+  });
 
   let headX = snake[0].x;
   let headY = snake[0].y;
 
-  if (direction === "LEFT") headX -= box;
-  if (direction === "RIGHT") headX += box;
-  if (direction === "UP") headY -= box;
-  if (direction === "DOWN") headY += box;
+  if(direction === "UP") headY -= box;
+  if(direction === "DOWN") headY += box;
+  if(direction === "LEFT") headX -= box;
+  if(direction === "RIGHT") headX += box;
 
-  // game over conditions
-  if (
-    headX < 0 ||
-    headY < 0 ||
-    headX >= 400 ||
-    headY >= 400 ||
-    collision({ x: headX, y: headY }, snake)
-  ) {
-    clearInterval(game);
-    alert("Game Over");
-    return;
-  }
+  if(headX === food.x && headY === food.y) {
+    score++;
+    document.getElementById("score").innerText = score;
 
-  if (headX === food.x && headY === food.y) {
-    food = randomFood();
+    food = {
+      x: Math.floor(Math.random() * 20) * box,
+      y: Math.floor(Math.random() * 20) * box
+    };
   } else {
     snake.pop();
   }
 
-  snake.unshift({ x: headX, y: headY });
+  const newHead = {
+    x: headX,
+    y: headY
+  };
+
+  snake.unshift(newHead);
+
+  // wall collision
+  if(
+    headX < 0 ||
+    headY < 0 ||
+    headX >= 400 ||
+    headY >= 400
+  ) {
+    alert("Game Over");
+    location.reload();
+  }
 }
 
-let game = setInterval(draw, 120);
+setInterval(draw, 100);
