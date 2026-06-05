@@ -1,1 +1,42 @@
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #0b0b0b;
+  color: white;
+  text-align: center;
+}
 
+header {
+  padding: 20px;
+}
+
+.grid {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.card {
+  background: #1c1c1c;
+  padding: 20px;
+  width: 250px;
+  border-radius: 12px;
+}
+
+button {
+  padding: 10px 15px;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: darkred;
+}
+
+.ad {
+  margin: 15px auto;
+  max-width: 728px;
+}
