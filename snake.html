@@ -1,72 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Snake Game</title>
-<style>
-body{
-background:black;
-color:white;
-text-align:center;
-font-family:Arial;
-}
-canvas{
-background:#111;
-border:2px solid white;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snake Game</title>
+
+  <!-- Google AdSense -->
+  <script async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6997544785907425"
+    crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <h1>Snake Game</h1>
+
+<!-- Ad -->
+<div class="ad">
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-6997544785907425"
+       data-ad-slot="YOUR_SLOT_ID"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+
 <canvas id="game" width="400" height="400"></canvas>
 
-<script>
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
+<br>
+<button onclick="location.href='index.html'">Back</button>
 
-let snake = [{x:200,y:200}];
-let food = {x:100,y:100};
-let dx = 20;
-let dy = 0;
-
-document.addEventListener("keydown", e=>{
-if(e.key==="ArrowUp" && dy===0){dx=0;dy=-20;}
-if(e.key==="ArrowDown" && dy===0){dx=0;dy=20;}
-if(e.key==="ArrowLeft" && dx===0){dx=-20;dy=0;}
-if(e.key==="ArrowRight" && dx===0){dx=20;dy=0;}
-});
-
-function draw(){
-ctx.clearRect(0,0,400,400);
-
-let head={
-x:snake[0].x+dx,
-y:snake[0].y+dy
-};
-
-snake.unshift(head);
-
-if(head.x===food.x && head.y===food.y){
-food={
-x:Math.floor(Math.random()*20)*20,
-y:Math.floor(Math.random()*20)*20
-};
-}else{
-snake.pop();
-}
-
-ctx.fillStyle="lime";
-snake.forEach(part=>{
-ctx.fillRect(part.x,part.y,20,20);
-});
-
-ctx.fillStyle="red";
-ctx.fillRect(food.x,food.y,20,20);
-}
-
-setInterval(draw,100);
-</script>
-
+<script src="snake.js"></script>
 </body>
 </html>
 
